@@ -166,7 +166,8 @@ bool JUCE_sandboxAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* JUCE_sandboxAudioProcessor::createEditor()
 {
-    return new JUCE_sandboxAudioProcessorEditor (*this);
+    //return new JUCE_sandboxAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -181,6 +182,24 @@ void JUCE_sandboxAudioProcessor::setStateInformation (const void* data, int size
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+juce::AudioProcessorValueTreeState::ParameterLayout
+    JUCE_sandboxAudioProcessor::createParameterLayout() 
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+
+    layout.add( std::make_unique<juce::AudioParameterFloat>("LowCut Freq",
+                                                            "LowCut Freq",
+                                                            juce::NormalisableRange<float>(20.f,20000.f,1.f,1.f),
+                                                            20.f));
+
+    layout.add( std::make_unique<juce::AudioParameterFloat>("HighCut Freq",
+                                                            "HighCut Freq",
+                                                            juce::NormalisableRange<float>(20.f,20000.f,1.f,1.f),
+                                                            20000.f));
+
+    return layout;
 }
 
 //==============================================================================
